@@ -1,0 +1,21 @@
+version: '2'
+services:
+  rabbitmq1:
+    image: rabbitmq:3.7.8-management
+    container_name: rabbitmq1
+    hostname: rabbitmq1
+    ports:
+      - "9090:15672"
+      - "9091:15671"
+    networks:
+      - external_network
+    volumes:
+     - $PWD/storage/rabbitmq1:/var/lib/rabbitmq
+    environment:
+     - RABBITMQ_DEFAULT_USER=mqadmin
+     - RABBITMQ_DEFAULT_PASS=Admin123XX_
+
+
+networks:
+  external_network:
+    driver: bridge
