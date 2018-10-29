@@ -20,7 +20,14 @@ public class ErrorHandlerController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(RabbitExpcetion.class)
     public final ResponseEntity<Message> handleUserNotFoundException(RabbitExpcetion ex) {
         Message message = new Message(ex.getMessage());
-        logger.error("Handling error: "+ex.getMessage());
+        logger.error("Handling error: "+ex.getMessage(), ex);
+        return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public final ResponseEntity<Message> handlerNullPointerException(NullPointerException ex) {
+        Message message = new Message("NullPointerException");
+        logger.error("Handling error: "+ex.getMessage(), ex);
         return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

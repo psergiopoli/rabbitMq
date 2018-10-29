@@ -5,6 +5,8 @@ import br.com.psergiopoli.rabbit.client.util.RabbitExpcetion;
 import com.rabbitmq.client.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -13,10 +15,15 @@ import java.io.IOException;
 @Service
 public class RabbitmqService {
 
-    private Logger logger = LoggerFactory.getLogger(RabbitmqService.class);
+    private Logger logger;
 
-    @Resource(name="rabbitChannel")
     private Channel channel;
+
+    @Autowired
+    public RabbitmqService(@Qualifier("rabbitChannel") Channel channel) {
+        this.channel = channel;
+        this.logger = LoggerFactory.getLogger(RabbitmqService.class);
+    }
 
     public Message sendMessage(String queue, String message) {
 
@@ -35,7 +42,6 @@ public class RabbitmqService {
 
         try {
             this.channel.queueDeclare(queue, false, false, false, null);
-
 
             Consumer consumer = new DefaultConsumer(channel) {
                 @Override
